@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Carbon Intel — Strategic Intelligence Platform</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --red:#CC0000;--redd:#A30000;--redl:#FDEAEA;--redm:#F5C0C0;
+  --bg:#FAFAF8;--card:#FFFFFF;--off:#F5F0EB;
+  --t1:#1A1A1A;--t2:#4A4A4A;--t3:#8A8A8A;--bd:#E0DAD2;
+  --blue:#0052CC;--bluel:#E6EFFE;--bluem:#B3C8F5;
+  --green:#1A7A3A;--amber:#C96B00;
+}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--t1);min-height:100vh}
+nav{background:var(--red);padding:0 1.5rem;height:52px;display:flex;align-items:center;gap:14px;position:sticky;top:0;z-index:100}
+.nb{font-size:13px;font-weight:500;color:#fff;letter-spacing:.05em;border-right:1px solid rgba(255,255,255,.3);padding-right:14px}
+.ns{font-size:11px;color:rgba(255,255,255,.8);letter-spacing:.1em;text-transform:uppercase;font-family:'DM Mono',monospace}
+.nd{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.7);margin-left:auto;animation:pulse 2s infinite}
+.nl{font-size:10px;color:rgba(255,255,255,.6);letter-spacing:.1em;font-family:'DM Mono',monospace}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+.main{max-width:680px;margin:0 auto;padding:2rem 1.25rem 4rem}
+.demo-badge{display:flex;align-items:center;gap:8px;background:var(--off);border:1px solid var(--bd);border-radius:4px;padding:8px 12px;margin-bottom:1.5rem;font-size:12px;color:var(--t2)}
+.demo-badge i{color:var(--green);font-size:16px}
+.demo-badge b{color:var(--t1);font-weight:500}
+h1{font-family:'Playfair Display',serif;font-size:28px;font-weight:700;line-height:1.3;margin-bottom:.4rem}
+h1 em{color:var(--red);font-style:italic}
+.hbar{width:30px;height:3px;background:var(--red);margin:.85rem 0 1rem}
+.hdesc{font-size:13px;color:var(--t2);line-height:1.75;margin-bottom:1.5rem}
+.tabs{display:flex;background:var(--card);border:1px solid var(--bd);border-radius:4px;overflow:hidden;margin-bottom:1rem}
+.tab{flex:1;padding:10px;display:flex;align-items:center;justify-content:center;gap:7px;cursor:pointer;border:none;background:transparent;border-bottom:3px solid transparent;transition:all .15s}
+.tab.ac{border-bottom-color:var(--red);background:var(--redl)}
+.tab.at{border-bottom-color:var(--blue);background:var(--bluel)}
+.tab-name{font-size:12px;font-weight:500;color:var(--t2)}
+.tab.ac .tab-name{color:var(--redd)}
+.tab.at .tab-name{color:#003B94}
+.sr{display:flex;gap:8px;margin-bottom:.6rem}
+.si{flex:1;border:1px solid var(--bd);border-radius:4px;padding:10px 14px;font-size:14px;font-family:'DM Sans',sans-serif;color:var(--t1);background:var(--card);outline:none;transition:border-color .15s}
+.si:focus{border-color:var(--red)}
+.sb{border:none;border-radius:4px;padding:10px 18px;color:#fff;font-size:12px;font-weight:700;cursor:pointer;letter-spacing:.06em;transition:opacity .15s}
+.sb:hover{opacity:.88}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:1.75rem}
+.chip{font-size:11px;padding:4px 11px;border:1px solid var(--bd);border-radius:3px;color:var(--t3);cursor:pointer;font-family:'DM Mono',monospace;background:transparent;transition:all .15s}
+.chip:hover{border-color:var(--red);color:var(--red);background:var(--redl)}
+.chip.tc:hover{border-color:var(--blue);color:#003B94;background:var(--bluel)}
+.api-row{display:flex;gap:8px;align-items:center;padding:8px 10px;background:var(--off);border:1px solid var(--bd);border-radius:4px;margin-bottom:1rem}
+.api-row span{font-size:11px;color:var(--t3);font-family:'DM Mono',monospace;flex:1}
+.api-input{border:1px solid var(--bd);border-radius:3px;padding:5px 10px;font-size:11px;font-family:'DM Mono',monospace;color:var(--t1);background:var(--card);outline:none;width:220px;transition:border-color .15s}
+.api-input:focus{border-color:var(--red)}
+.api-save{background:var(--t1);border:none;border-radius:3px;padding:5px 12px;color:#fff;font-size:11px;cursor:pointer}
+.api-saved{font-size:11px;color:var(--green);font-family:'DM Mono',monospace;display:none}
+.api-saved.show{display:block}
+.loading{text-align:center;padding:3rem 0;display:none}
+.loading.show{display:block}
+.lm{font-size:11px;color:var(--t3);letter-spacing:.15em;text-transform:uppercase;margin-bottom:.85rem;font-family:'DM Mono',monospace}
+.lb{width:180px;height:2px;background:var(--bd);margin:0 auto;overflow:hidden;border-radius:1px}
+.lf{width:40%;height:100%;border-radius:1px;animation:scan 1.2s ease-in-out infinite}
+@keyframes scan{0%{transform:translateX(-150%)}100%{transform:translateX(500%)}}
+.eb{display:none;background:var(--redl);border:1px solid var(--redm);border-radius:4px;padding:.85rem 1rem;margin-bottom:1rem}
+.eb.show{display:block}
+.et{font-size:12px;font-weight:700;color:var(--red);margin-bottom:3px;font-family:'DM Mono',monospace}
+.em{font-size:12px;color:var(--redd)}
+.results{display:none;animation:fadein .4s ease}
+.results.show{display:block}
+@keyframes fadein{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.rc{background:var(--card);border:1px solid var(--bd);border-radius:4px;padding:1.1rem;margin-bottom:10px}
+.rc.tr{border-top:4px solid var(--red)}
+.rc.tb{border-top:4px solid var(--blue)}
+.coname{font-family:'Playfair Display',serif;font-size:20px;margin-bottom:4px}
+.cotag{font-size:13px;color:var(--t2);font-style:italic;margin-bottom:.85rem}
+.cometa{font-size:11px;color:var(--t3);font-family:'DM Mono',monospace;margin-bottom:.7rem}
+.cotags{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:.75rem}
+.ctag{font-size:10px;padding:2px 8px;font-family:'DM Mono',monospace;letter-spacing:.04em}
+.ctag.red{background:var(--redl);color:var(--redd);border:1px solid var(--redm)}
+.ctag.blue{background:var(--bluel);color:#003B94;border:1px solid var(--bluem)}
+.cosum{font-size:13px;color:var(--t2);line-height:1.7}
+.lbl{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--t3);font-family:'DM Mono',monospace;font-weight:500;margin-bottom:.5rem}
+.twoc{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+@media(max-width:480px){.twoc{grid-template-columns:1fr}}
+.trlbig{font-size:24px;margin-bottom:3px}
+.trlbig.r{color:var(--red)}.trlbig.b{color:var(--blue)}
+.trlsub{font-size:11px;color:var(--t3);font-family:'DM Mono',monospace;margin-bottom:7px}
+.trlbar{display:flex;gap:3px;margin-bottom:4px}
+.ts{flex:1;height:4px;border-radius:1px}
+.mr{margin-bottom:11px}
+.mv{font-size:22px;font-family:'Playfair Display',serif}
+.mv.r{color:var(--red)}.mv.b{color:var(--blue)}
+.mv2{font-size:16px;font-family:'Playfair Display',serif;color:var(--t1)}
+.msub{font-size:11px;color:var(--t3);margin-top:2px}
+.tpill{background:var(--off);border:1px solid var(--bd);border-radius:3px;padding:4px 8px;font-size:11px;color:var(--t1);font-weight:500;display:inline-block;margin:.25rem 0}
+.mline{border-top:1px solid var(--bd);padding-top:.75rem;margin-top:.25rem}
+.moatr{display:flex;gap:8px;align-items:flex-start;margin-bottom:8px}
+.mbar{width:2px;min-height:26px;flex-shrink:0;margin-top:3px}
+.mbar.r{background:var(--redm)}.mbar.b{background:var(--bluem)}
+.mname{font-size:12px;font-weight:500;color:var(--t1)}
+.mdesc{font-size:11px;color:var(--t2);line-height:1.5;margin-top:1px}
+.mstr{font-size:10px;padding:2px 8px;font-family:'DM Mono',monospace;letter-spacing:.06em;border-radius:2px}
+.thesis{font-size:14px;font-style:italic;color:var(--t1);line-height:1.7;border-left:3px solid var(--red);padding-left:12px;margin-bottom:.85rem}
+.thesis.b{border-left-color:var(--blue)}
+.pr{display:flex;gap:10px;align-items:flex-start;margin-bottom:6px}
+.pd{width:5px;height:5px;border-radius:50%;margin-top:6px;flex-shrink:0}
+.pd.r{background:var(--red)}.pd.b{background:var(--blue)}
+.pt{font-size:13px;color:var(--t2);line-height:1.6}
+.rg{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+@media(max-width:480px){.rg{grid-template-columns:1fr}}
+.rk{padding:.65rem;border-radius:3px}
+.rh{background:#FDEAEA;border:1px solid #F5C0C0}
+.rm{background:#FFF3E0;border:1px solid #FFCC80}
+.rl{background:#E8F5E9;border:1px solid #A5D6A7}
+.rkhdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
+.rkn{font-size:11px;font-weight:500}
+.rh .rkn{color:var(--red)}.rm .rkn{color:var(--amber)}.rl .rkn{color:var(--green)}
+.rks{font-size:9px;font-family:'DM Mono',monospace;letter-spacing:.08em}
+.rh .rks{color:var(--red)}.rm .rks{color:var(--amber)}.rl .rks{color:var(--green)}
+.rkd{font-size:11px;color:var(--t2);line-height:1.5}
+.qr{display:flex;gap:12px;align-items:flex-start;padding:9px 0;border-bottom:1px solid var(--bd)}
+.qr:last-child{border-bottom:none;padding-bottom:0}
+.qn{font-size:11px;font-weight:500;font-family:'DM Mono',monospace;min-width:22px;padding-top:2px;flex-shrink:0}
+.qn.r{color:var(--red)}.qn.b{color:var(--blue)}
+.qfw{display:flex;align-items:center;gap:6px;margin-bottom:3px;flex-wrap:wrap}
+.fw{font-size:9px;font-weight:700;padding:2px 7px;font-family:'DM Mono',monospace;letter-spacing:.05em;border-radius:2px}
+.fw-FP{background:#FDEAEA;color:#791F1F;border:1px solid #F5C0C0}
+.fw-WTP{background:#EEEDFE;color:#3C3489;border:1px solid #AFA9EC}
+.fw-NPS{background:#EAF3DE;color:#27500A;border:1px solid #97C459}
+.fw-RAP{background:#FAEEDA;color:#633806;border:1px solid #EF9F27}
+.fw-EV{background:#FBEAF0;color:#72243E;border:1px solid #ED93B1}
+.fwn{font-size:10px;color:var(--t3);font-family:'DM Mono',monospace}
+.qt{font-size:13px;color:var(--t2);line-height:1.65}
+.acts{display:flex;gap:8px;justify-content:center;margin-top:1.25rem}
+.ab{font-size:11px;padding:8px 18px;background:transparent;border:1px solid var(--bd);color:var(--t2);cursor:pointer;border-radius:3px;transition:all .15s;font-family:'DM Sans',sans-serif;letter-spacing:.04em}
+.ab:hover{background:var(--off)}
+.ab.cp{background:var(--redl);border-color:var(--redm);color:var(--redd)}
+footer{text-align:center;padding:2rem;font-size:11px;color:var(--t3);font-family:'DM Mono',monospace;border-top:1px solid var(--bd);margin-top:2rem}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nb">BAIN &amp; COMPANY</div>
+  <div class="ns">Carbon Intel</div>
+  <div class="nd"></div>
+  <div class="nl">LIVE · AI</div>
+</nav>
+
+<div class="main">
+
+  <div class="demo-badge">
+    <i class="ti ti-circle-check" style="font-size:16px;color:#1A7A3A" aria-hidden="true">✓</i>
+    <span><b>No API key needed</b> for the 12 featured companies — results load instantly. Add an optional key below for any custom company.</span>
+  </div>
+
+  <h1>Carbon &amp; Telecom<br/><em>Intelligence.</em></h1>
+  <div class="hbar"></div>
+  <p class="hdesc">Structured consulting briefs built on Bain's five strategic frameworks — for carbon removal and 5G/6G companies.</p>
+
+  <div class="tabs">
+    <button class="tab ac" id="tc" onclick="setDomain('climate')">
+      <span style="font-size:15px">🌿</span><span class="tab-name">Climate Tech</span>
+    </button>
+    <button class="tab" id="tt" onclick="setDomain('telecom')">
+      <span style="font-size:15px">📡</span><span class="tab-name">Telecom &amp; 5G/6G</span>
+    </button>
+  </div>
+
+  <div class="sr">
+    <input class="si" id="si" placeholder="e.g. Climeworks, Sustaera, Heirloom Carbon…" onkeydown="if(event.key==='Enter')analyze()"/>
+    <button class="sb" id="sb" style="background:var(--red)" onclick="analyze()">ANALYZE</button>
+  </div>
+  <div class="chips" id="chips"></div>
+
+  <div class="api-row" id="api-row">
+    <span>Optional: add API key for custom companies not in the list</span>
+    <input class="api-input" id="ai" type="password" placeholder="sk-ant-api03-..."/>
+    <button class="api-save" onclick="saveKey()">Save</button>
+    <span class="api-saved" id="as">✓ saved</span>
+  </div>
+
+  <div class="loading" id="loading">
+    <div class="lm" id="lm">Scanning market intelligence…</div>
+    <div class="lb"><div class="lf" id="lf" style="background:var(--red)"></div></div>
+  </div>
+  <div class="eb" id="eb"><div class="et">ANALYSIS FAILED</div><div class="em" id="em"></div></div>
+  <div class="results" id="results"></div>
+</div>
+
+<footer>Carbon Intel · Built by Yoshita Dharni · Duke MEM 2025 · Powered by Claude</footer>
+
+<script>
+const MSGS=["Scanning market intelligence…","Mapping competitive landscape…","Benchmarking strategic position…","Structuring investor narrative…","Mapping Bain frameworks…"];
+const FW_NAMES={FP:"Full Potential",WTP:"Where to Play",NPS:"Net Promoter",RAP:"RAPID Decision",EV:"Elements of Value"};
+const TRL_LABELS=["","Research","Research","Concept","Prototype","Prototype","Pilot","Pilot","Demo","Commercial"];
+
+// ─── PRE-BUILT BRIEFS ─────────────────────────────────────────────────────────
+const PREBUILT = {
+  "climeworks":{company:"Climeworks AG",tagline:"Swiss DAC pioneer scaling carbon removal toward gigaton ambition",founded:"~2009",hq:"Zurich, Switzerland",summary:"Climeworks operates the world's largest commercial DAC facilities including Mammoth in Iceland, using modular geothermal-powered capture with permanent basalt mineralisation storage. The company holds the most commercial operating hours of any DAC player globally.",category:"Direct Air Capture",trl:8,stage:"Early commercial",moat_type:"Technology",moat_strength:"Strong",moat_dims:[{label:"First-mover scale",desc:"Only DAC operator with multi-kt commercial facilities running and proprietary cost-reduction learning curve."},{label:"Geothermal integration",desc:"Stranded energy access at Hellisheidi creates structurally defensible cost advantage over air-cooled competitors."},{label:"Offtake network",desc:"Microsoft, Stripe, and 50+ CDR buyers locked into multi-year agreements providing revenue floor."}],metric1_label:"Current Cost",metric1_value:"~$1,000/tonne",metric2_label:"Target Cost",metric2_value:"$300/tonne by 2030",metric3_label:"Trajectory",metric3_value:"Steeply declining",metric3_sub:"Key lever: module manufacturing scale",raised:"$780M",round:"Series E",thesis:"Climeworks is the conviction bet that modular DAC achieves cost parity with nature-based solutions by 2030 — and that the first operator to demonstrate gigaton economics captures the corporate net-zero offtake market.",proofs:["Mammoth facility (36,000 tonne/yr) validates modular assembly-line approach at commercial scale","Operational data from Orca and Mammoth builds proprietary cost-reduction learning curve no competitor can replicate","Microsoft 10-year offtake provides revenue floor and validates enterprise buyer willingness to pay at current prices"],risks:[{label:"Cost trajectory",sev:"High",desc:"$300/t target requires 3x cost reduction in 7 years — historically unprecedented in energy hardware."},{label:"Policy dependency",sev:"Medium",desc:"US IRA 45Q and EU Innovation Fund credits critical; regulatory reversal compresses margins severely."},{label:"Competing tech",sev:"Low",desc:"Enhanced weathering and ocean CDR are cheaper per tonne but permanence and MRV standards favour DAC."}],questions:[{fw:"FP",q:"What would Climeworks look like at its ceiling if module manufacturing achieved semiconductor-industry learning curves and geothermal access scaled to all volcanic regions globally?"},{fw:"WTP",q:"Is Europe's geothermal-DAC cluster the right arena long-term, or does structural advantage shift to East Africa and Iceland as primary cost-competitive geographies?"},{fw:"NPS",q:"What do Climeworks' highest-value offtake buyers actually value most — permanence verification, reporting simplicity, or price certainty over a 10-year horizon?"},{fw:"RAP",q:"Where do capital allocation decisions stall between manufacturing scale-up, new site development, and R&D — and who in the organisation actually decides when trade-offs arise?"},{fw:"EV",q:"Which value dimensions — cost certainty, permanence credentialing, or reputational association — most drive corporate buyer willingness to pay a premium over nature-based offsets?"}]},
+
+  "heirloom carbon":{company:"Heirloom Carbon",tagline:"Mineral weathering DAC using limestone to pull carbon at low cost",founded:"~2020",hq:"San Francisco, USA",summary:"Heirloom uses enhanced weathering of calcium oxide to capture CO₂ at dramatically lower energy costs than conventional DAC. Backed by the US DOE and private capital, it aims to reach $50/tonne through manufacturing scale.",category:"Direct Air Capture",trl:6,stage:"Pre-commercial",moat_type:"Cost",moat_strength:"Moderate",moat_dims:[{label:"Low-energy process",desc:"Limestone-based approach requires far less electricity than sorbent-based DAC, structurally reducing costs."},{label:"DOE backing",desc:"US Department of Energy investment provides credibility, co-funding, and de-risking for commercial scale-up."},{label:"Speed to pilot",desc:"Rapid iteration cycle from lab to pilot validates learning-by-doing cost reduction trajectory ahead of peers."}],metric1_label:"Current Cost",metric1_value:"~$1,000/tonne",metric2_label:"Target Cost",metric2_value:"$50/tonne long-term",metric3_label:"Trajectory",metric3_value:"Gradually declining",metric3_sub:"Key lever: low energy input + scale",raised:"$53M",round:"Series A",thesis:"Heirloom's bet is that limestone-based DAC can reach $50/tonne through process simplicity and manufacturing scale — unlocking the market where conventional DAC stalls on energy cost.",proofs:["DOE Frontier programme funding validates technology readiness and commercial potential","Limestone feedstock is globally abundant and cheap, removing supply chain risk at scale","Partnership with Stripe Climate and other advance purchase commitments provides early revenue signal"],risks:[{label:"Scale uncertainty",sev:"High",desc:"Pilot-to-commercial jump is unproven — limestone hydration at gigaton scale has no direct precedent."},{label:"Energy access",sev:"Medium",desc:"Even low-energy processes require consistent clean energy supply — grid dependency creates geographic constraints."},{label:"IP protection",sev:"Low",desc:"Process is based on natural chemistry — patent moat is thinner than sorbent-based competitors."}],questions:[{fw:"FP",q:"What does Heirloom look like at its ceiling if limestone hydration scales to industrial-process speed and the $50/tonne target is hit by 2035?"},{fw:"WTP",q:"Should Heirloom focus on US DOE-subsidised scale-up or pursue geographies with cheap clean energy and limestone abundance as primary growth arena?"},{fw:"NPS",q:"What do Frontier Programme buyers actually value — cost trajectory certainty, additionality claims, or the reputational signal of backing a novel approach?"},{fw:"RAP",q:"Where does decision-making stall between process R&D, site selection, and capital raise — and how does DOE co-funding change internal accountability?"},{fw:"EV",q:"Which dimensions — low cost promise, process novelty, or US-origin narrative — most drive advance purchase commitment among corporate buyers?"}]},
+
+  "sustaera":{company:"Sustaera",tagline:"Ceramic monolith DAC designed for modular, low-cost deployment",founded:"~2020",hq:"Durham, NC, USA",summary:"Sustaera is developing a ceramic monolith-based direct air capture system engineered for low-cost modular deployment. Spun out of NC State, the company targets industrial waste heat integration to dramatically reduce energy costs versus conventional DAC.",category:"Direct Air Capture",trl:5,stage:"Pre-commercial",moat_type:"Technology",moat_strength:"Moderate",moat_dims:[{label:"Ceramic monolith sorbent",desc:"Novel sorbent architecture enables higher contact surface area and lower pressure drop than pellet or liquid systems."},{label:"Waste heat integration",desc:"Design engineered around industrial waste heat sources, reducing effective energy cost to near zero in co-located deployments."},{label:"Academic spin-out IP",desc:"NC State research foundation provides defensible IP base and access to continued university R&D pipeline."}],metric1_label:"Current Cost",metric1_value:"~$400–600/tonne (projected)",metric2_label:"Target Cost",metric2_value:"$100/tonne by 2032",metric3_label:"Trajectory",metric3_value:"Steeply declining",metric3_sub:"Key lever: waste heat + manufacturing",raised:"Early stage",round:"Seed",thesis:"Sustaera's thesis is that waste heat co-location removes the largest cost component of DAC — energy — and that ceramic monolith architecture achieves better performance per dollar than incumbent sorbent approaches.",proofs:["Ceramic monolith architecture validated at bench scale with competitive CO₂ capture rates","Waste heat integration strategy addresses energy cost — the primary barrier to sub-$200/tonne DAC","Durham, NC location provides access to Research Triangle industrial partners for co-location pilots"],risks:[{label:"Technology readiness",sev:"High",desc:"TRL 5 means significant scale-up risk remains before commercial deployment — multiple engineering hurdles ahead."},{label:"Waste heat dependency",sev:"Medium",desc:"Business model depends on proximity to industrial waste heat — limits deployable geographies significantly."},{label:"Capital requirements",sev:"Medium",desc:"Moving from bench to commercial scale requires significant capital raise in a competitive climate-tech funding environment."}],questions:[{fw:"FP",q:"What does Sustaera look like at its ceiling — if ceramic monolith manufacturing achieves pellet-level costs and waste heat co-location becomes the dominant DAC deployment model?"},{fw:"WTP",q:"Should Sustaera target industrial parks with abundant waste heat as its primary go-to-market, or pursue standalone deployment to maximise addressable geography?"},{fw:"NPS",q:"What do potential industrial co-location partners actually value most — carbon credit revenue sharing, reputational co-branding, or operational simplicity of the integration?"},{fw:"RAP",q:"Where do commercialisation decisions stall between technology validation, site partnership development, and Series A fundraising — and who holds the deciding vote?"},{fw:"EV",q:"Which value dimensions — cost certainty, waste heat utilisation, or Made-in-USA narrative — most drive interest from industrial partners and corporate offtake buyers?"}]},
+
+  "1pointfive":{company:"1PointFive (Occidental)",tagline:"Stratos — world's first commercial-scale DAC plant in Texas",founded:"~2021",hq:"Houston, TX, USA",summary:"1PointFive is Occidental Petroleum's carbon management subsidiary, operating Stratos — the world's first large-scale commercial DAC plant at 500,000 tonne/yr capacity. It combines oil major capital and operational expertise with Carbon Engineering's technology.",category:"Direct Air Capture",trl:9,stage:"Commercial",moat_type:"Strategic relationships",moat_strength:"Strong",moat_dims:[{label:"Oil major backing",desc:"Occidental's balance sheet and operational infrastructure provides capital and scale advantages no pure-play can match."},{label:"Stratos commercial operation",desc:"First mover at commercial scale generates operating data, offtake relationships, and regulatory learning."},{label:"45Q tax credit access",desc:"US IRA 45Q credits at $180/tonne for geological storage make the economics structurally viable at current prices."}],metric1_label:"Current Cost",metric1_value:"~$400–600/tonne",metric2_label:"Target Cost",metric2_value:"$100/tonne by 2035",metric3_label:"Trajectory",metric3_value:"Gradually declining",metric3_sub:"Key lever: 45Q subsidies + scale",raised:"$1.1B+",round:"Strategic/Public (OXY)",thesis:"1PointFive's bet is that oil major capital and operational expertise — combined with IRA subsidies — makes large-scale DAC economically viable a decade ahead of pure-play competitors who lack the balance sheet.",proofs:["Stratos plant in Texas operational at commercial scale — first in the world at this size","Amazon and other Fortune 500 companies signed multi-year offtake agreements for carbon removal credits","Occidental's oil field infrastructure repurposed for CO₂ geological storage at minimal marginal cost"],risks:[{label:"IRA policy risk",sev:"High",desc:"Business model deeply dependent on 45Q credits — political reversal makes economics non-viable at current prices."},{label:"Reputational conflict",sev:"Medium",desc:"Oil major ownership creates credibility tension with buyers prioritising genuine net-zero rather than carbon offsetting."},{label:"Tech licensing",sev:"Low",desc:"Reliance on Carbon Engineering's licensed technology creates some IP dependency and royalty obligations."}],questions:[{fw:"FP",q:"What does 1PointFive look like at its ceiling if IRA policy holds and Occidental deploys capital to scale Stratos to 10 plants by 2035?"},{fw:"WTP",q:"Should 1PointFive target voluntary carbon market buyers or compliance market buyers as the primary customer segment for Stratos credits?"},{fw:"NPS",q:"What do Amazon and other offtake buyers actually value from 1PointFive — scale certainty, geological permanence, or US-origin supply chain?"},{fw:"RAP",q:"Where do strategic decisions stall between Occidental's core oil business priorities and 1PointFive's carbon removal growth agenda?"},{fw:"EV",q:"Which value elements — permanence, scale, or the narrative of oil majors funding their own transition — most drive corporate buyer willingness to pay $400+/tonne?"}]},
+
+  "charm industrial":{company:"Charm Industrial",tagline:"Bio-oil injection — fast, cheap, permanent carbon removal at scale",founded:"~2018",hq:"San Francisco, USA",summary:"Charm Industrial converts agricultural waste into bio-oil and injects it into underground geological formations for permanent storage — one of the cheapest permanent CDR pathways available today. Stripe, Microsoft, and Shopify are among its offtake buyers.",category:"BECCS",trl:7,stage:"Early commercial",moat_type:"Cost",moat_strength:"Strong",moat_dims:[{label:"Lowest-cost permanent CDR",desc:"Bio-oil injection achieves ~$300-600/tonne — significantly cheaper than DAC while delivering geological permanence."},{label:"Agricultural waste feedstock",desc:"Crop residue feedstock is abundant, cheap, and distributed — no feedstock supply risk at scale."},{label:"Fast deployment",desc:"No new infrastructure required — bio-oil injected at existing oil & gas injection wells, enabling rapid geographic scale."}],metric1_label:"Current Cost",metric1_value:"~$300–600/tonne",metric2_label:"Target Cost",metric2_value:"$50–100/tonne long-term",metric3_label:"Trajectory",metric3_value:"Steeply declining",metric3_sub:"Key lever: feedstock network + injection scale",raised:"~$100M",round:"Series B",thesis:"Charm's thesis is that bio-oil injection is the fastest path to cheap, permanent CDR — using existing infrastructure and waste feedstock to sidestep the capital intensity and energy costs that constrain DAC approaches.",proofs:["Stripe, Microsoft, Shopify, and McKinsey Sustainability have all purchased Charm carbon removal credits","Agricultural residue feedstock sourced from Midwest corn and wheat farming — no land use change required","Existing oil and gas injection well infrastructure dramatically reduces time and capital to commercial deployment"],risks:[{label:"Permanence verification",sev:"Medium",desc:"Long-term geological permanence of bio-oil injection is not yet independently verified over multi-century timescales."},{label:"Feedstock competition",sev:"Medium",desc:"Agricultural residue is also demanded for bioenergy, biochar, and soil amendment — competing uses could raise feedstock costs."},{label:"Regulatory approval",sev:"Low",desc:"Underground injection requires EPA Class VI well permits — permitting timelines vary significantly by state."}],questions:[{fw:"FP",q:"What does Charm look like at its ceiling — if agricultural residue network covers the Midwest and injection capacity scales to 10M tonnes/yr by 2030?"},{fw:"WTP",q:"Should Charm prioritise the voluntary corporate market or position for emerging compliance markets as regulatory carbon pricing develops in the US?"},{fw:"NPS",q:"What do Stripe and Microsoft value most from Charm — price point, permanence narrative, or the speed and operational reliability of delivery?"},{fw:"RAP",q:"Where do decisions stall between feedstock sourcing, injection well permitting, and offtake pricing — and how does the ops team versus commercial team split accountability?"},{fw:"EV",q:"Which value dimensions — low cost, fast delivery, agricultural co-benefits, or permanence assurance — most drive buyer willingness to pay a premium over nature-based credits?"}]},
+
+  "verdox":{company:"Verdox",tagline:"Electrochemical carbon capture using electricity instead of heat",founded:"~2019",hq:"Cambridge, MA, USA",summary:"Verdox has developed an electrochemical approach to CO₂ capture that uses electrons instead of heat — enabling integration with cheap renewable electricity and bypassing the thermal energy costs that drive DAC economics. MIT spin-out backed by Bill Gates' Breakthrough Energy.",category:"Direct Air Capture",trl:5,stage:"Pre-commercial",moat_type:"Technology",moat_strength:"Strong",moat_dims:[{label:"Electrochemical process",desc:"Electron-driven capture eliminates thermal regeneration energy — structurally reduces operating costs as renewable electricity prices fall."},{label:"MIT IP foundation",desc:"Core technology licensed from MIT with strong patent protection on the electrochemical swing absorption mechanism."},{label:"Breakthrough Energy backing",desc:"Bill Gates' Breakthrough Energy portfolio provides capital, network, and technology development support."}],metric1_label:"Current Cost",metric1_value:"~$500–800/tonne (projected)",metric2_label:"Target Cost",metric2_value:"$50–100/tonne by 2035",metric3_label:"Trajectory",metric3_value:"Steeply declining",metric3_sub:"Key lever: electricity cost decline + scale",raised:"~$80M",round:"Series B",thesis:"Verdox's bet is that electrochemical DAC decouples carbon capture economics from natural gas or heat costs — making the technology structurally advantaged as electricity gets cheap and thermally-driven DAC hits an energy cost floor.",proofs:["MIT-originated IP with defensible patent protection on the core electrochemical mechanism","Breakthrough Energy Ventures backing signals credibility and access to technology commercialisation expertise","Electricity-driven process means cost trajectory directly tracks renewable energy learning curves — the fastest-falling cost in energy"],risks:[{label:"Scale-up complexity",sev:"High",desc:"Electrochemical systems have different engineering challenges at scale than thermal systems — stack degradation and current density are unproven at commercial scale."},{label:"Electricity dependency",sev:"Medium",desc:"Cost advantage depends on access to cheap, clean electricity — grid-constrained regions lose the structural benefit."},{label:"Competition",sev:"Low",desc:"Multiple electrochemical CDR approaches in development — Verdox must reach commercial scale before a better-capitalised competitor proves the same thesis."}],questions:[{fw:"FP",q:"What does Verdox look like at its ceiling if electrochemical DAC achieves $50/tonne by 2035 and becomes the dominant approach as renewable electricity reaches $20/MWh?"},{fw:"WTP",q:"Should Verdox prioritise co-location with wind and solar farms where electricity is cheapest, or target industrial emitters where point-source capture is a complementary offering?"},{fw:"NPS",q:"What do Breakthrough Energy and advance purchase buyers value most from Verdox — technology novelty, cost trajectory, or the credibility of MIT IP?"},{fw:"RAP",q:"Where do commercialisation decisions stall between stack engineering, pilot site selection, and the next capital raise — and how does the MIT licensing relationship affect decision speed?"},{fw:"EV",q:"Which value elements — electricity-driven cost curve, technology uniqueness, or the Breakthrough Energy brand association — most drive buyer and investor willingness to commit?"}]},
+
+  "ericsson":{company:"Telefonaktiebolaget LM Ericsson",tagline:"Global RAN leader scaling 5G while architecting the 6G future",founded:"~1876",hq:"Stockholm, Sweden",summary:"Ericsson is the world's second-largest telecom equipment vendor and leading RAN supplier by global market share, with 5G deployments across 130+ countries. The company holds one of the largest 5G SEP portfolios globally and is shifting revenue toward software and managed services.",category:"RAN Infrastructure",trl:9,stage:"Commercial",moat_type:"IP & Standards",moat_strength:"Strong",moat_dims:[{label:"5G SEP portfolio",desc:"One of the world's largest 5G standard-essential patent portfolios generates licensing revenue regardless of equipment market share."},{label:"Global carrier relationships",desc:"Decades-long relationships with Tier-1 carriers in 180+ countries create high switching costs and renewal advantages."},{label:"R&D scale",desc:"$4B+ annual R&D investment sustains technology leadership and ensures participation in every major standards body."}],metric1_label:"5G Deployments",metric1_value:"130+ countries",metric2_label:"6G Readiness",metric2_value:"TRL 3–4, targeting 2030",metric3_label:"Revenue Model",metric3_value:"HW + SW + Services",metric3_sub:"Key growth: managed services + software",raised:"$4B+ R&D annually",round:"Public (NASDAQ: ERIC)",thesis:"Ericsson's thesis is that standards leadership, SEP licensing, and the shift from hardware to software margins positions it to capture disproportionate value in the 5G-to-6G transition — independent of equipment market share competition.",proofs:["5G RAN commercial deployments with 8 of the world's 10 largest operators including AT&T, Verizon, and T-Mobile","$3B+ annual licensing revenue from 5G SEP portfolio — largely independent of equipment sales outcomes","Cloud RAN and Open RAN product portfolio positions Ericsson for the vRAN shift without cannibalising core business"],risks:[{label:"Geopolitical fragmentation",sev:"High",desc:"US-China tech decoupling and supply chain localisation requirements threaten addressable market in key geographies."},{label:"Open RAN disruption",sev:"Medium",desc:"O-RAN architecture enables new software-only competitors to enter the RAN market, potentially eroding hardware margins."},{label:"Margin pressure",sev:"Low",desc:"Hardware commoditisation and carrier consolidation create ongoing pricing pressure on equipment business lines."}],questions:[{fw:"FP",q:"What does Ericsson look like at its ceiling if software and managed services reach 50% of revenue by 2028 and 6G standards leadership is secured?"},{fw:"WTP",q:"Should Ericsson prioritise enterprise private 5G as the next growth arena over carrier infrastructure, given margin and competitive dynamics in each?"},{fw:"NPS",q:"What do Tier-1 carrier customers actually value most from Ericsson — network performance, software roadmap certainty, or managed services flexibility?"},{fw:"RAP",q:"Where do network deployment decisions stall between operator procurement, standards body timelines, and chipset availability — and who in the ecosystem holds the critical path?"},{fw:"EV",q:"Which value dimensions — latency SLAs, vendor ecosystem openness, AI-native network integration, or total cost of ownership — most drive operator switching decisions?"}]},
+
+  "nokia":{company:"Nokia Corporation",tagline:"Full-stack network vendor betting on software and 6G leadership",founded:"~1865",hq:"Espoo, Finland",summary:"Nokia is a global telecom infrastructure vendor competing across RAN, core, and optical network segments. Following its transformation from mobile handsets, Nokia has rebuilt around enterprise and carrier network software, with Bell Labs anchoring its research credibility.",category:"RAN Infrastructure",trl:9,stage:"Commercial",moat_type:"Technology",moat_strength:"Moderate",moat_dims:[{label:"Bell Labs research",desc:"World's most storied industrial research lab provides 6G and AI-native network technology pipeline inaccessible to competitors."},{label:"Full-stack portfolio",desc:"RAN, core, and optical coverage allows bundled deals that competitors with narrower portfolios cannot match."},{label:"Enterprise 5G positioning",desc:"Early investment in private 5G for manufacturing and logistics positions Nokia ahead of Ericsson in the enterprise segment."}],metric1_label:"5G Deployments",metric1_value:"100+ countries",metric2_label:"6G Readiness",metric2_value:"TRL 3, targeting 2030–2032",metric3_label:"Revenue Model",metric3_value:"HW + SW + Enterprise",metric3_sub:"Key growth: private 5G + software",raised:"$2.5B+ R&D annually",round:"Public (NASDAQ: NOK)",thesis:"Nokia's thesis is that Bell Labs IP, full-stack portfolio coverage, and early positioning in enterprise private 5G gives it a differentiated path to margin expansion that pure RAN competitors cannot replicate.",proofs:["Bell Labs holds 20,000+ patents and has produced 10 Nobel Prize winners — research credibility unmatched in telecom","Private 5G deployments at BMW, Mercedes-Benz, and major logistics operators validate enterprise segment traction","ReefShark chipset programme demonstrates ability to compete on silicon alongside software, not just software alone"],risks:[{label:"RAN market share",sev:"High",desc:"Ericsson holds stronger RAN relationships with major carriers — Nokia's share erosion in this segment limits scale."},{label:"Execution history",sev:"Medium",desc:"Nokia's post-Lumia transformation has been slow — market confidence in execution speed is lower than Ericsson."},{label:"Open RAN",sev:"Low",desc:"O-RAN architecture could disintermediate Nokia's hardware in the same way it threatens all traditional RAN vendors."}],questions:[{fw:"FP",q:"What does Nokia look like at its ceiling if Bell Labs IP drives 6G standard dominance and private 5G revenue reaches €5B by 2028?"},{fw:"WTP",q:"Should Nokia double down on enterprise private 5G where it leads Ericsson, or fight for carrier RAN share where it is structurally disadvantaged?"},{fw:"NPS",q:"What do Nokia's enterprise 5G customers — BMW, logistics operators — value most: integration simplicity, SLA performance, or vendor-agnostic architecture?"},{fw:"RAP",q:"Where do Nokia's product investment decisions stall between Bell Labs research, carrier sales priorities, and enterprise segment development — and who arbitrates?"},{fw:"EV",q:"Which value dimensions — Bell Labs credibility, full-stack bundling, or private 5G operational simplicity — most drive enterprise buyer selection over Ericsson?"}]},
+
+  "qualcomm":{company:"Qualcomm Incorporated",tagline:"5G silicon and IP licensing leader powering the connected world",founded:"~1985",hq:"San Diego, CA, USA",summary:"Qualcomm dominates 5G modem silicon and holds the most valuable standards-essential patent portfolio in wireless, collecting licensing revenue from virtually every smartphone sold globally. Its Snapdragon platform extends into automotive, IoT, and AI at the edge.",category:"Spectrum & Chipsets",trl:9,stage:"Commercial",moat_type:"IP",moat_strength:"Strong",moat_dims:[{label:"5G SEP licensing monopoly",desc:"FRAND licensing on essential 5G patents generates ~$6B annually — collected from competitors and customers alike."},{label:"Snapdragon silicon leadership",desc:"Snapdragon X Elite and modem series lead on 5G performance, AI inference, and power efficiency in premium devices."},{label:"Automotive expansion",desc:"Snapdragon Digital Chassis is designed into 40+ automakers — creating a decade-long revenue stream outside phones."}],metric1_label:"5G Chipset Share",metric1_value:"~80% premium Android modems",metric2_label:"6G Timeline",metric2_value:"Standards participation active, 2030+",metric3_label:"Revenue Split",metric3_value:"QCT chips + QTL licensing",metric3_sub:"Key growth: automotive + edge AI",raised:"$2B+ R&D annually",round:"Public (NASDAQ: QCOM)",thesis:"Qualcomm's thesis is that 5G SEP licensing provides an unassailable royalty floor while Snapdragon silicon expands into automotive and AI edge computing — making it a platform company, not just a chipmaker.",proofs:["$6B+ annual licensing revenue from QTL division collected regardless of chip market share fluctuations","Snapdragon X Elite outperforms Apple M3 in AI inference benchmarks — credible threat to PC and edge AI markets","40+ automaker design wins for Snapdragon Digital Chassis provide 5–8 year revenue visibility in automotive"],risks:[{label:"Licensing legal challenges",sev:"High",desc:"China, EU, and US antitrust regulators continue challenging FRAND licensing practices — adverse rulings could structurally impact QTL revenue."},{label:"Apple modem insourcing",sev:"Medium",desc:"Apple is developing its own 5G modem to replace Qualcomm — losing Apple would remove ~$6B from QCT revenue."},{label:"ARM competition",sev:"Low",desc:"MediaTek and Samsung Exynos closing performance gap in mid-tier 5G — reducing Qualcomm's addressable premium share."}],questions:[{fw:"FP",q:"What does Qualcomm look like at its ceiling if Snapdragon becomes the dominant automotive AI platform and QTL licensing survives regulatory challenge intact?"},{fw:"WTP",q:"Should Qualcomm prioritise defending smartphone modem share or accelerate automotive and edge AI where competitive intensity is lower and margins higher?"},{fw:"NPS",q:"What do OEM partners like Samsung and Xiaomi actually value most from Qualcomm — silicon performance, time-to-market speed, or IP licensing flexibility?"},{fw:"RAP",q:"Where do decisions stall between QCT silicon roadmap, QTL licensing strategy, and new vertical investment — and how does the board balance short-term licensing cash and long-term platform bets?"},{fw:"EV",q:"Which value dimensions — AI inference performance, 5G standards compliance, automotive integration, or licensing certainty — most drive OEM and automaker platform selection?"}]},
+
+  "mavenir":{company:"Mavenir",tagline:"Open RAN software disruptor challenging the hardware incumbents",founded:"~2005",hq:"Richardson, TX, USA",summary:"Mavenir is a cloud-native network software company building the Open RAN and core network stack that challenges Ericsson and Nokia's integrated hardware model. Backed by Providence Equity and serving 250+ carriers, it is the leading pure-play Open RAN software vendor.",category:"O-RAN/vRAN",trl:7,stage:"Early commercial",moat_type:"Execution speed",moat_strength:"Moderate",moat_dims:[{label:"Cloud-native architecture",desc:"Built on Kubernetes and open APIs from inception — not a legacy system retrofitted, giving genuine cloud economics."},{label:"Carrier relationships",desc:"250+ carrier deployments including major operators gives commercial proof points incumbents cannot dismiss."},{label:"Open RAN timing",desc:"Early mover in O-RAN software as operators seek to break Ericsson/Nokia duopoly and reduce vendor lock-in."}],metric1_label:"Carrier Deployments",metric1_value:"250+ operators globally",metric2_label:"6G Readiness",metric2_value:"Software-defined — native 6G path",metric3_label:"Revenue Model",metric3_value:"Software subscriptions + professional services",metric3_sub:"Key growth: US carrier Open RAN mandates",raised:"~$500M",round:"Private (Providence Equity)",thesis:"Mavenir's bet is that O-RAN disaggregation is inevitable as carriers resist Ericsson/Nokia pricing power — and that a cloud-native software stack built for this transition captures margin that incumbents cannot defend as hardware commoditises.",proofs:["Dish Network's greenfield 5G network built on Mavenir's Open RAN stack — the largest O-RAN deployment in the US","GSMA and O-RAN Alliance participation positions Mavenir in every standards conversation that shapes next-generation architecture","US government ORAN Policy Coalition support creates mandate tailwind in the largest carrier market globally"],risks:[{label:"Incumbent response",sev:"High",desc:"Ericsson and Nokia are both investing heavily in O-RAN compatibility — if incumbents credibly offer disaggregation, Mavenir's differentiation narrows."},{label:"Integration complexity",sev:"Medium",desc:"O-RAN multi-vendor integration is harder to operate than single-vendor stacks — carrier hesitation slows adoption pace."},{label:"Scale capital",sev:"Low",desc:"Competing against Ericsson's $4B R&D budget requires continued private equity backing to sustain product velocity."}],questions:[{fw:"FP",q:"What does Mavenir look like at its ceiling if US carrier Open RAN mandates accelerate and Mavenir captures 20% of the global RAN software market by 2028?"},{fw:"WTP",q:"Should Mavenir prioritise greenfield operators like Dish who adopt O-RAN from launch, or incumbent carriers doing brownfield Open RAN migration?"},{fw:"NPS",q:"What do carrier customers value most from Mavenir — cost reduction versus incumbents, vendor flexibility, or the operational simplicity of a single software vendor for the O-RAN stack?"},{fw:"RAP",q:"Where do carrier deployment decisions stall between Mavenir's software readiness, system integrator capacity, and carrier ops team willingness to operate multi-vendor networks?"},{fw:"EV",q:"Which value dimensions — vendor lock-in avoidance, total cost savings, 6G future-proofing, or US government alignment — most drive carrier adoption of Open RAN over incumbent solutions?"}]},
+
+  "samsung networks":{company:"Samsung Networks",tagline:"Korean tech giant disrupting RAN with integrated silicon and software",founded:"~1969",hq:"Suwon, South Korea",summary:"Samsung Networks has emerged as a credible RAN challenger to Ericsson and Nokia, winning major US carrier contracts with AT&T and Verizon while leveraging its in-house Exynos modem silicon. The division combines semiconductor integration and software in ways pure network vendors cannot match.",category:"RAN Infrastructure",trl:8,stage:"Commercial",moat_type:"Technology",moat_strength:"Moderate",moat_dims:[{label:"Vertical integration",desc:"In-house Exynos silicon plus RAN software creates a fully integrated stack that reduces BOM cost and accelerates roadmap."},{label:"US carrier wins",desc:"AT&T and Verizon contracts validate Samsung as a credible Tier-1 alternative in the world's highest-value carrier market."},{label:"Conglomerate R&D",desc:"Samsung Group's $20B+ annual R&D budget subsidises Networks division investment beyond what standalone telecom vendors can sustain."}],metric1_label:"5G Deployments",metric1_value:"US, Korea, Japan, India",metric2_label:"6G Readiness",metric2_value:"TRL 3–4, targeting 2030",metric3_label:"Revenue Model",metric3_value:"Integrated HW + SW stack",metric3_sub:"Key growth: US and India carrier share",raised:"Samsung Group R&D (~$20B)",round:"Division of Samsung Electronics",thesis:"Samsung Networks' thesis is that vertical integration from silicon to software enables a cost and performance advantage that Ericsson and Nokia — who outsource their chipsets — structurally cannot match over a 5G and 6G cycle.",proofs:["$6.6B 5-year contract with Verizon validates Samsung as a credible Tier-1 RAN vendor outside Korea","In-house Exynos modem leadership means Samsung designs its own 5G and future 6G baseband silicon","India Jio partnership positions Samsung for the world's fastest-growing large carrier market as 5G rollout accelerates"],risks:[{label:"Global market share",sev:"High",desc:"Outside US, Korea, and Japan, Samsung's RAN market share is minimal — breaking into European and rest-of-world carrier accounts is structurally difficult."},{label:"Conglomerate priorities",sev:"Medium",desc:"Samsung Group's semiconductor, consumer electronics, and display businesses dwarf Networks — investment can be cut if Group priorities shift."},{label:"Ericsson incumbency",sev:"Low",desc:"Ericsson's deep carrier relationships in Europe and LatAm make displacing it in existing accounts very expensive for Samsung."}],questions:[{fw:"FP",q:"What does Samsung Networks look like at its ceiling if silicon integration advantage compounds into 6G and the division captures 20% global RAN share by 2030?"},{fw:"WTP",q:"Should Samsung Networks prioritise expanding in India where it has Jio momentum, or fight for European RAN share where Ericsson incumbency is strongest?"},{fw:"NPS",q:"What do AT&T and Verizon actually value most from Samsung Networks — total cost of ownership, silicon roadmap integration, or the leverage Samsung provides in their Ericsson contract negotiations?"},{fw:"RAP",q:"Where do Samsung Networks investment decisions stall between Group semiconductor priorities, carrier sales commitments, and R&D allocation for 6G?"},{fw:"EV",q:"Which value dimensions — integrated silicon-to-software economics, US supply chain origin, or 6G roadmap credibility — most drive carrier RFP selection of Samsung over Ericsson?"}]},
+
+  "rakuten symphony":{company:"Rakuten Symphony",tagline:"Cloud-native Open RAN operator selling its own network OS to the world",founded:"~2020",hq:"Tokyo, Japan",summary:"Rakuten Symphony is the B2B telecom technology spin-off of Rakuten Mobile — selling the Open RAN platform that Rakuten built for its own greenfield Japanese network. It is the only vendor that has operated a fully virtualised Open RAN network at commercial scale.",category:"O-RAN/vRAN",trl:7,stage:"Early commercial",moat_type:"Technology",moat_strength:"Strong",moat_dims:[{label:"Proof of operation",desc:"Rakuten Mobile is the world's only carrier operating a fully virtualised Open RAN at commercial scale — Symphony has the only proven reference network."},{label:"Symworld platform",desc:"End-to-end cloud-native telecom OS stack — from RAN to core — designed as a single integrated product, not a patchwork of open-source components."},{label:"Japanese operator credibility",desc:"Rakuten Mobile's operational data at 10M+ subscribers provides commercial proof points no competitor lab trial can match."}],metric1_label:"Reference Network",metric1_value:"10M+ subscribers (Rakuten JP)",metric2_label:"6G Readiness",metric2_value:"Cloud-native — native 6G evolution",metric3_label:"Revenue Model",metric3_value:"Platform licensing + professional services",metric3_sub:"Key growth: carrier greenfield deployments",raised:"~$3B (Rakuten Mobile total)",round:"Subsidiary (Rakuten Group)",thesis:"Rakuten Symphony's unique advantage is that it is selling software it actually operates — not software it has only tested. No other Open RAN vendor can offer a proven reference network at commercial scale as credibility proof.",proofs:["Rakuten Mobile operates Japan's 4th carrier on a fully virtualised Open RAN — the only commercial-scale proof point in the world","1&1 Drillisch in Germany selected Symphony's platform for Europe's first fully virtualised Open RAN greenfield network","Softbank and DISH partnerships validate Symphony's platform beyond its parent company's network"],risks:[{label:"Rakuten Mobile losses",sev:"High",desc:"Rakuten Mobile has been deeply loss-making — if the parent carrier fails, Symphony loses its reference network and credibility anchor."},{label:"Integration complexity",sev:"Medium",desc:"Full-stack cloud-native telco OS is conceptually elegant but operationally complex — carrier IT teams struggle to operate it."},{label:"Incumbent adaptation",sev:"Low",desc:"Ericsson and Nokia are both building credible O-RAN offerings — if they close the gap, Symphony's first-mover advantage narrows."}],questions:[{fw:"FP",q:"What does Rakuten Symphony look like at its ceiling if Rakuten Mobile becomes profitable and Symphony scales its platform to 20 commercial carrier deployments by 2027?"},{fw:"WTP",q:"Should Symphony target greenfield operators who have no incumbent to displace, or pursue brownfield Open RAN migrations at established carriers willing to risk complexity for cost savings?"},{fw:"NPS",q:"What do 1&1 and other carrier customers value most from Symphony — the reference network proof, end-to-end stack simplicity, or the ability to tell a differentiated vendor-independence story?"},{fw:"RAP",q:"Where do carrier procurement decisions stall between Symphony's technical readiness, systems integrator availability, and carrier board approval for a non-incumbent vendor?"},{fw:"EV",q:"Which value dimensions — proven reference network, full-stack simplicity, or cost savings versus Ericsson — most drive greenfield carrier selection of Symphony over established Open RAN alternatives?"}]}
+};
+
+const DOMAINS={
+  climate:{
+    examples:["Climeworks","Heirloom Carbon","1PointFive","Charm Industrial","Sustaera","Verdox"],
+    placeholder:"e.g. Climeworks, Sustaera, Heirloom Carbon…",
+    system:`You are a senior strategy consultant specializing in carbon removal markets. Respond ONLY with valid JSON. No markdown. No text before or after. Start with { end with }. Keep all strings under 30 words.`,
+    prompt:n=>`Brief for climate-tech company "${n}". Return ONLY this JSON:
+{"company":"Name","tagline":"8-10 word positioning","founded":"~Year","hq":"City, Country","summary":"2 short sentences.","category":"Direct Air Capture","trl":6,"stage":"Early commercial","moat_type":"Technology","moat_strength":"Strong","moat_dims":[{"label":"L","desc":"One sentence."},{"label":"L","desc":"One sentence."},{"label":"L","desc":"One sentence."}],"metric1_label":"Current Cost","metric1_value":"~$X/tonne","metric2_label":"Target Cost","metric2_value":"$X/tonne by YEAR","metric3_label":"Trajectory","metric3_value":"Steeply declining","metric3_sub":"Key lever: X","raised":"$XM","round":"Series B","thesis":"1-2 sentences.","proofs":["P1","P2","P3"],"risks":[{"label":"R","sev":"High","desc":"One sentence."},{"label":"R","sev":"Medium","desc":"One sentence."},{"label":"R","sev":"Low","desc":"One sentence."}],"questions":[{"fw":"FP","q":"Q?"},{"fw":"WTP","q":"Q?"},{"fw":"NPS","q":"Q?"},{"fw":"RAP","q":"Q?"},{"fw":"EV","q":"Q?"}]}
+Fill with real data about ${n}. Use ~ for estimates.`
+  },
+  telecom:{
+    examples:["Ericsson","Nokia","Qualcomm","Samsung Networks","Mavenir","Rakuten Symphony"],
+    placeholder:"e.g. Ericsson, Nokia, Qualcomm, Mavenir…",
+    system:`You are a senior strategy consultant specializing in telecom, 5G and 6G markets. Respond ONLY with valid JSON. No markdown. No text before or after. Start with { end with }. Keep all strings under 30 words.`,
+    prompt:n=>`Brief for telecom/5G/6G company "${n}". Return ONLY this JSON:
+{"company":"Name","tagline":"8-10 word positioning","founded":"~Year","hq":"City, Country","summary":"2 short sentences.","category":"RAN Infrastructure","trl":8,"stage":"Commercial","moat_type":"IP & Standards","moat_strength":"Strong","moat_dims":[{"label":"L","desc":"One sentence."},{"label":"L","desc":"One sentence."},{"label":"L","desc":"One sentence."}],"metric1_label":"5G Deployments","metric1_value":"X+ countries","metric2_label":"6G Readiness","metric2_value":"TRL X, targeting YEAR","metric3_label":"Revenue Model","metric3_value":"HW + SW + Services","metric3_sub":"Key growth: X","raised":"$XB R&D annually","round":"Public","thesis":"1-2 sentences.","proofs":["P1","P2","P3"],"risks":[{"label":"R","sev":"High","desc":"One sentence."},{"label":"R","sev":"Medium","desc":"One sentence."},{"label":"R","sev":"Low","desc":"One sentence."}],"questions":[{"fw":"FP","q":"Q?"},{"fw":"WTP","q":"Q?"},{"fw":"NPS","q":"Q?"},{"fw":"RAP","q":"Q?"},{"fw":"EV","q":"Q?"}]}
+Fill with real data about ${n}. Use ~ for estimates.`
+  }
+};
+
+let domain="climate", apiKey="", loading=false, msgInterval;
+
+function saveKey(){
+  const k=document.getElementById("ai").value.trim();
+  if(!k)return;
+  apiKey=k;
+  document.getElementById("as").classList.add("show");
+  document.getElementById("ai").value="sk-ant-●●●●●●";
+}
+
+function setDomain(d){
+  domain=d;
+  const D=DOMAINS[d];
+  document.getElementById("tc").className="tab"+(d==="climate"?" ac":"");
+  document.getElementById("tt").className="tab"+(d==="telecom"?" at":"");
+  document.getElementById("si").placeholder=D.placeholder;
+  document.getElementById("sb").style.background=d==="climate"?"var(--red)":"var(--blue)";
+  document.getElementById("lf").style.background=d==="climate"?"var(--red)":"var(--blue)";
+  renderChips(); clearResults();
+}
+
+function renderChips(){
+  document.getElementById("chips").innerHTML=DOMAINS[domain].examples.map(e=>
+    `<button class="chip${domain==="telecom"?" tc":""}" onclick="runChip('${e}')">${e}</button>`
+  ).join("");
+}
+
+function runChip(name){document.getElementById("si").value=name;analyze();}
+
+function clearResults(){
+  document.getElementById("results").className="results";
+  document.getElementById("results").innerHTML="";
+  document.getElementById("eb").className="eb";
+  document.getElementById("loading").className="loading";
+}
+
+function extractJSON(text){
+  const s=text.indexOf("{"),e=text.lastIndexOf("}");
+  if(s===-1||e<=s)throw new Error("No JSON found");
+  return JSON.parse(text.slice(s,e+1));
+}
+
+async function analyze(){
+  const n=(document.getElementById("si").value||"").trim();
+  if(!n){document.getElementById("si").focus();return;}
+  if(loading)return;
+  clearResults();
+
+  const key=n.toLowerCase().replace(/\s+/g," ").trim();
+  if(PREBUILT[key]){renderResults(PREBUILT[key]);return;}
+
+  if(!apiKey){
+    document.getElementById("eb").className="eb show";
+    document.getElementById("em").textContent=`"${n}" is not in the pre-built list. Add your Anthropic API key above to generate a brief for any company.`;
+    return;
+  }
+
+  loading=true;
+  let mi=0;
+  document.getElementById("loading").className="loading show";
+  msgInterval=setInterval(()=>{
+    mi=(mi+1)%MSGS.length;
+    document.getElementById("lm").textContent=MSGS[mi];
+  },1400);
+
+  try{
+    const D=DOMAINS[domain];
+    const res=await fetch("https://api.anthropic.com/v1/messages",{
+      method:"POST",
+      headers:{"Content-Type":"application/json","x-api-key":apiKey,"anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"},
+      body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:2048,system:D.system,messages:[{role:"user",content:D.prompt(n)}]})
+    });
+    if(!res.ok){const e=await res.text();throw new Error(`API ${res.status}: ${e.slice(0,200)}`);}
+    const raw=await res.json();
+    const data=extractJSON(raw.content?.[0]?.text||"");
+    renderResults(data);
+  }catch(e){
+    document.getElementById("eb").className="eb show";
+    document.getElementById("em").textContent=e.message;
+  }finally{
+    clearInterval(msgInterval);
+    loading=false;
+    document.getElementById("loading").className="loading";
+  }
+}
+
+function renderResults(d){
+  const isT=domain==="telecom";
+  const ac=isT?"b":"r";
+  const tCls=isT?"at":"ac";
+
+  const trlBar=Array.from({length:9},(_,i)=>
+    `<div class="ts" style="background:${i<d.trl?(isT?"#0052CC":"#CC0000"):"#E0DAD2"}"></div>`
+  ).join("");
+
+  const moatDims=(d.moat_dims||[]).map(m=>`
+    <div class="moatr">
+      <div class="mbar ${ac}"></div>
+      <div><div class="mname">${m.label}</div><div class="mdesc">${m.desc}</div></div>
+    </div>`).join("");
+
+  const mstrStyle=d.moat_strength==="Strong"
+    ?(isT?"background:#E6EFFE;color:#003B94;border:1px solid #B3C8F5":"background:#FDEAEA;color:#791F1F;border:1px solid #F5C0C0")
+    :"background:#F5F0EB;color:#8A8A8A;border:1px solid #E0DAD2";
+
+  const proofs=(d.proofs||[]).map(p=>`
+    <div class="pr"><div class="pd ${ac}"></div><div class="pt">${p}</div></div>`).join("");
+
+  const risks=(d.risks||[]).map(r=>`
+    <div class="rk ${r.sev==="High"?"rh":r.sev==="Medium"?"rm":"rl"}">
+      <div class="rkhdr"><span class="rkn">${r.label}</span><span class="rks">${(r.sev||"").toUpperCase()}</span></div>
+      <div class="rkd">${r.desc}</div>
+    </div>`).join("");
+
+  const qs=(d.questions||[]).map((q,i)=>{
+    const fw=typeof q==="object"?q.fw:null;
+    const qt=typeof q==="object"?q.q:q;
+    return `<div class="qr">
+      <div class="qn ${ac}">0${i+1}</div>
+      <div>
+        ${fw?`<div class="qfw"><span class="fw fw-${fw}">${fw}</span><span class="fwn">${FW_NAMES[fw]||""}</span></div>`:""}
+        <div class="qt">${qt}</div>
+      </div>
+    </div>`;
+  }).join("");
+
+  document.getElementById("results").innerHTML=`
+    <div class="rc t${ac}">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:10px;margin-bottom:.85rem">
+        <div>
+          <div class="coname">${d.company}</div>
+          <div class="cotag">${d.tagline}</div>
+        </div>
+        <div style="text-align:right;flex-shrink:0">
+          <div class="cometa">Est. ${d.founded} · ${d.hq}</div>
+          <div class="cotags" style="justify-content:flex-end">
+            <span class="ctag ${isT?"blue":"red"}">${d.category}</span>
+            <span class="ctag ${isT?"blue":"red"}">${d.stage}</span>
+          </div>
+        </div>
+      </div>
+      <div class="cosum">${d.summary}</div>
+    </div>
+
+    <div class="twoc">
+      <div class="rc">
+        <div class="lbl">Technology readiness</div>
+        <div class="trlbig ${ac}">TRL ${d.trl}</div>
+        <div class="trlsub">${TRL_LABELS[d.trl]||""}</div>
+        <div class="trlbar">${trlBar}</div>
+        <div style="margin-top:.85rem">
+          <div class="lbl">Competitive moat</div>
+          <div style="display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-bottom:.7rem">
+            <span style="font-size:13px;font-weight:500">${d.moat_type}</span>
+            <span class="mstr" style="${mstrStyle}">${(d.moat_strength||"").toUpperCase()}</span>
+          </div>
+          ${moatDims}
+        </div>
+      </div>
+      <div class="rc">
+        <div class="lbl">Key metrics</div>
+        <div class="mr"><div style="font-size:10px;color:var(--t3);font-family:'DM Mono',monospace;margin-bottom:2px">${d.metric1_label}</div><div class="mv ${ac}">${d.metric1_value}</div></div>
+        <div class="mr"><div style="font-size:10px;color:var(--t3);font-family:'DM Mono',monospace;margin-bottom:2px">${d.metric2_label}</div><div class="mv2">${d.metric2_value}</div></div>
+        <div class="mr"><div style="font-size:10px;color:var(--t3);font-family:'DM Mono',monospace;margin-bottom:2px">${d.metric3_label}</div><div class="tpill">${d.metric3_value}</div><div class="msub">${d.metric3_sub||""}</div></div>
+        <div class="mline"><div class="lbl">Funding</div><span class="mv2">${d.raised} </span><span style="font-size:11px;color:var(--t3);font-family:'DM Mono',monospace">${d.round}</span></div>
+      </div>
+    </div>
+
+    <div class="rc">
+      <div class="lbl">Strategic thesis</div>
+      <div class="thesis ${isT?"b":""}">${d.thesis}</div>
+      ${proofs}
+    </div>
+
+    <div class="rc">
+      <div class="lbl">Risk flags</div>
+      <div class="rg">${risks}</div>
+    </div>
+
+    <div class="rc">
+      <div class="lbl">Strategic questions · Bain frameworks</div>
+      ${qs}
+    </div>
+
+    <div class="acts">
+      <button class="ab" onclick="clearResults();document.getElementById('si').value=''">← New search</button>
+      <button class="ab" id="cb" onclick="copyBrief()">Copy brief ↗</button>
+    </div>`;
+
+  document.getElementById("results").className="results show";
+  window._lastData=d;
+}
+
+function copyBrief(){
+  const d=window._lastData; if(!d)return;
+  const qs=(d.questions||[]).map((q,i)=>{
+    const fw=typeof q==="object"?q.fw:"";
+    const qt=typeof q==="object"?q.q:q;
+    return `${i+1}. [${fw}] ${qt}`;
+  });
+  const txt=[
+    `CARBON INTEL — ${d.company}`,`"${d.tagline}"`,
+    `\nSUMMARY\n${d.summary}`,
+    `\nMARKET POSITION\nCategory: ${d.category} | TRL: ${d.trl} | Stage: ${d.stage}`,
+    `\nCOMPETITIVE MOAT (${d.moat_strength})\nType: ${d.moat_type}`,
+    ...(d.moat_dims||[]).map(m=>`• ${m.label}: ${m.desc}`),
+    `\nKEY METRICS\n${d.metric1_label}: ${d.metric1_value}`,
+    `${d.metric2_label}: ${d.metric2_value}`,
+    `${d.metric3_label}: ${d.metric3_value}`,
+    `\nFUNDING: ${d.raised} (${d.round})`,
+    `\nSTRATEGIC THESIS\n${d.thesis}`,
+    ...(d.proofs||[]).map(p=>`• ${p}`),
+    `\nRISK FLAGS`,
+    ...(d.risks||[]).map(r=>`• [${r.sev}] ${r.label}: ${r.desc}`),
+    `\nSTRATEGIC QUESTIONS`,
+    ...qs
+  ].join("\n");
+  navigator.clipboard.writeText(txt).then(()=>{
+    const b=document.getElementById("cb");
+    b.textContent="Copied ✓"; b.className="ab cp";
+    setTimeout(()=>{b.textContent="Copy brief ↗";b.className="ab"},2200);
+  }).catch(()=>{});
+}
+
+renderChips();
+</script>
+</body>
+</html>
