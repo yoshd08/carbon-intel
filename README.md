@@ -1,4 +1,4 @@
-# Carbon Intel
+# Carbon Intel - Bain 
 ### Strategic Intelligence Platform — Built on Bain's Five Frameworks
 
 > **[→ Live Demo](
