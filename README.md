@@ -1,7 +1,11 @@
 # Carbon Intel
 ### Strategic Intelligence Platform — Built on Bain's Five Frameworks
 
-> **[→ Live Demo]()**
+> **[→ Live Demo](
+
+https://github.com/user-attachments/assets/3586845c-0587-43a6-8748-8a9a56bb6088
+
+)**
 
 Structured competitive intelligence briefs for carbon removal and 5G/6G companies — generated in under 5 seconds using AI, with every strategic question explicitly mapped to one of Bain & Company's five core frameworks.
 
